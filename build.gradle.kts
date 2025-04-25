@@ -38,16 +38,18 @@ tasks.shadowJar {
     archiveClassifier.set("") // remove "-all" do nome final
 }
 
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            artifact(tasks.named("shadowJar").get()) {
-                classifier = null // evita conflito
-            }
+            from(components["java"]) // ou "shadow" se usar shadowJar
 
             groupId = project.group.toString()
             artifactId = "snk-wrapper"
             version = project.version.toString()
         }
+    }
+    repositories {
+        mavenLocal()
     }
 }
