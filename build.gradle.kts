@@ -9,7 +9,7 @@ version = "1.0.0"
 repositories {
     mavenCentral()
     flatDir {
-        dirs("Libs") // sua pasta com os .jar
+        dirs("libs") // sua pasta com os .jar
     }
 }
 
