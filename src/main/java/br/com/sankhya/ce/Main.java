@@ -34,7 +34,7 @@ public class Main {
     public static void addToDependencies(List<File> files) {
         for (File file : files) {
             // Imprime no formato desejado
-            System.out.println(String.format("implementation(mapOf(\"name\" to \"%s\"))", file.getName().replaceFirst("[.][^.]+$", "")));
+            System.out.printf("implementation(mapOf(\"group\" to \"br.com.sankhya\",\"name\" to \"%s\", \"version\" to \"master\"))%n", file.getName().replaceFirst("[.][^.]+$", ""));
         }
     }
 }
