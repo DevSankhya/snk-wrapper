@@ -61,6 +61,7 @@ publishing {
     }
 }
 
+
 tasks.jar {
     val dependencies = configurations
         .runtimeClasspath
