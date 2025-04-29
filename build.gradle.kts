@@ -19,10 +19,9 @@ repositories {
 
 
 dependencies {
-    val localJars = fileTree("libs") {
+    implementation(fileTree("libs") {
         include("*.jar")
-    }
-    implementation(localJars)
+    })
 
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:2.3.3")
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.3")

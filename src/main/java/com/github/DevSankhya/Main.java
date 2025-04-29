@@ -1,7 +1,5 @@
 package com.github.DevSankhya;
 
-import br.com.sankhya.modelcore.util.SPBeanUtils;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
