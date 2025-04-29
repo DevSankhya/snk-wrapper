@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.DevSankhya"
-version = "1.0.6"
+version = "1.0.9"
 
 repositories {
     mavenCentral()
