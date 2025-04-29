@@ -1,5 +1,7 @@
 package com.github.DevSankhya;
 
+import br.com.sankhya.modelcore.util.SPBeanUtils;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -12,9 +14,17 @@ public class Main {
         File dir = new File("libs");  // Substitua pelo caminho do seu diretório
         List<File> files = getFilesFromDir(dir);
         for (File file : files) {
-            createPomLib(file);
+            renameFile(file);
         }
-//        addToDependencies(files);
+
+//        getDep(files);
+    }
+
+    public static void getDep(List<File> files) {
+        for (File file : files) {
+            // Imprime no formato desejado
+            System.out.printf("implementation(\":%s\")%n", file.getName().replaceFirst("[.][^.]+$", ""));
+        }
     }
 
     private static List<File> getDirs(File dir) {
@@ -55,6 +65,20 @@ public class Main {
             // Imprime no formato desejado
             System.out.printf("implementation(\"br.com.sankhya:%s:master\")\n", file.getName().replaceFirst("[.][^.]+$", ""));
         }
+    }
+
+    public static void renameFile(File file) {
+        // Get file name without extension
+        String fileName = file.getName().replaceFirst("[.][^.]+$", "");
+        // Remove all numbers from fileName
+        fileName = fileName.replaceAll("\\d", "");
+        // Remove all dots from fileName
+        fileName = fileName.replaceAll("\\.", "");
+        // Remove all alone hyphens from fileName
+        fileName = fileName.replaceAll("-$", "");
+        
+        file.renameTo(new File("libs/" + fileName + ".jar"));
+        // Create a pom.xml file in the folder
     }
 
     public static void createPomLib(File file) {

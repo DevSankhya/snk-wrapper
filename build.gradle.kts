@@ -19,10 +19,14 @@ repositories {
 
 
 dependencies {
-    implementation(fileTree("libs") { include("*.jar") })
+    val localJars = fileTree("libs") {
+        include("*.jar")
+    }
+    implementation(localJars)
 
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:2.3.3")
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.3")
+    implementation("org.jdom", "jdom", "1.1.3")
 
 }
 
@@ -33,23 +37,42 @@ java {
 var fatJarName = "";
 
 tasks.shadowJar {
+    mergeServiceFiles()
+    val runtimeClasspath = project.configurations.runtimeClasspath.get()
+    val dependencies = runtimeClasspath
+        .map(::zipTree) // OR .map { zipTree(it) }
+    from(dependencies)
+    configurations = listOf(runtimeClasspath)
     archiveBaseName.set("snk-wrapper")
     archiveVersion.set(project.version.toString())
     archiveClassifier.set("") // remove "-all" do nome final
 }
-
-
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            from(components["java"]) // ou "shadow" se usar shadowJar
+//            from(components["java"]) // ou "shadow" se usar shadowJar
 
             groupId = project.group.toString()
             artifactId = "snk-wrapper"
             version = project.version.toString()
+
+            artifact(tasks.named("shadowJar").get()) {
+                builtBy(tasks.named("shadowJar"))
+            }
+
+            suppressAllPomMetadataWarnings()
         }
     }
     repositories {
         mavenLocal()
     }
+}
+tasks.named("jar").configure {
+    enabled = false
+}
+tasks.named("assemble").configure {
+    enabled = false
+}
+tasks.named("publishMavenPublicationToMavenLocal") {
+    dependsOn(tasks.named("shadowJar"))
 }
