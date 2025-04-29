@@ -1,9 +1,8 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("java")
     id("maven-publish")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+//    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.github.DevSankhya"
@@ -34,44 +33,40 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 var fatJarName = "";
-
-tasks.shadowJar {
-    mergeServiceFiles()
-    val runtimeClasspath = project.configurations.runtimeClasspath.get()
-    val dependencies = runtimeClasspath
-        .map(::zipTree) // OR .map { zipTree(it) }
-    from(dependencies)
-    configurations = listOf(runtimeClasspath)
-    archiveBaseName.set("snk-wrapper")
-    archiveVersion.set(project.version.toString())
-    archiveClassifier.set("") // remove "-all" do nome final
-}
+//
+//tasks.shadowJar {
+//    mergeServiceFiles()
+//    val runtimeClasspath = project.configurations.runtimeClasspath.get()
+//    val dependencies = runtimeClasspath
+//        .map(::zipTree) // OR .map { zipTree(it) }
+//    from(dependencies)
+//    configurations = listOf(runtimeClasspath)
+//    archiveBaseName.set("snk-wrapper")
+//    archiveVersion.set(project.version.toString())
+//    archiveClassifier.set("") // remove "-all" do nome final
+//}
 publishing {
     publications {
         create<MavenPublication>("maven") {
-//            from(components["java"]) // ou "shadow" se usar shadowJar
+            from(components["java"]) // ou "shadow" se usar shadowJar
 
             groupId = project.group.toString()
             artifactId = "snk-wrapper"
             version = project.version.toString()
 
-            artifact(tasks.named("shadowJar").get()) {
-                builtBy(tasks.named("shadowJar"))
-            }
-
-            suppressAllPomMetadataWarnings()
         }
     }
     repositories {
         mavenLocal()
     }
 }
-tasks.named("jar").configure {
-    enabled = false
+
+tasks.jar {
+    val dependencies = configurations
+        .runtimeClasspath
+        .get()
+        .map(::zipTree) // OR .map { zipTree(it) }
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-tasks.named("assemble").configure {
-    enabled = false
-}
-tasks.named("publishMavenPublicationToMavenLocal") {
-    dependsOn(tasks.named("shadowJar"))
-}
+
