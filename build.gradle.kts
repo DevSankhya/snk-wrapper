@@ -6,13 +6,13 @@ plugins {
 }
 
 group = "com.github.DevSankhya"
-version = "1.0.9"
+version = "1.1.2"
 
 repositories {
     mavenCentral()
     mavenLocal()
     flatDir {
-        dirs("libs") // sua pasta com os .jar
+        dirs("libs")
     }
 }
 
