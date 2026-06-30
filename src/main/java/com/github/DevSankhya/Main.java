@@ -12,7 +12,8 @@ public class Main {
         File dir = new File("libs");  // Substitua pelo caminho do seu diretório
         List<File> files = getFilesFromDir(dir);
         for (File file : files) {
-            renameFile(file);
+            System.out.println(file.getAbsolutePath());
+//            renameFile(file);
         }
 
 //        getDep(files);
